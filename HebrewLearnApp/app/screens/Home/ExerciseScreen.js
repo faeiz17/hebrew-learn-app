@@ -21,7 +21,7 @@ export default function ExerciseScreen({ route, navigation }) {
   const fetchExercises = async () => {
     try {
       const response = await fetch(
-        `https://hebrew-backend-44h3.vercel.app/api/exercises/story/${storyId}`
+        `https://hebrew-backend-8sozbbz4w-faeiz17s-projects.vercel.app/api/exercises/story/${storyId}`
       );
       const data = await response.json();
       setQuestions(data);

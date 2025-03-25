@@ -19,7 +19,7 @@ export default function StoryScreen({ route, navigation }) {
   const fetchStory = async () => {
     try {
       const response = await fetch(
-        `https://hebrew-backend-44h3.vercel.app/api/stories/${storyId}`
+        `https://hebrew-backend-8sozbbz4w-faeiz17s-projects.vercel.app/api/stories/${storyId}`
       );
       const data = await response.json();
       setStory(data);
