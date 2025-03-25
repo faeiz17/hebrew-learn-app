@@ -1,6 +1,6 @@
 // app/screens/Auth/RegisterScreen.js
 import React, { useContext, useState } from "react";
-import { View, StyleSheet, Dimensions } from "react-native";
+import { View, StyleSheet, Dimensions, Alert } from "react-native";
 import {
   Button,
   TextInput,
@@ -14,12 +14,61 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function RegisterScreen({ navigation }) {
   const { login } = useContext(AuthContext);
+
+  // Local state for registration fields
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleRegister = () => {
-    // Call your backend to register; on success, update context.
-    login({ email });
+  // Handle registration
+  const handleRegister = async () => {
+    try {
+      // 1) Send data to your backend
+      const response = await fetch(
+        "https://hebrew-backend-8sozbbz4w-faeiz17s-projects.vercel.app/api/users/register",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name, email, password }),
+        }
+      );
+
+      // 2) Check for errors
+      if (!response.ok) {
+        const errorData = await response.json();
+        Alert.alert(
+          "Registration Error",
+          errorData.message || "Something went wrong"
+        );
+        return;
+      }
+
+      // 3) Parse the response
+      const data = await response.json();
+      // For example, data might be:
+      // {
+      //   id: "643edaf32...",
+      //   name: "Alice",
+      //   email: "alice@example.com",
+      //   role: "student"
+      // }
+
+      // 4) Construct the user object for our AuthContext
+      const newUser = {
+        _id: data.id, // or data._id if your backend returns `_id`
+        name: data.name,
+        email: data.email,
+        role: data.role,
+      };
+
+      // 5) Immediately log the user in (updates AuthContext, AsyncStorage, etc.)
+      login(newUser);
+
+      // 6) Optionally navigate to a main/home screen:
+      // navigation.replace("MainNavigator");
+    } catch (error) {
+      Alert.alert("Registration Error", error.message);
+    }
   };
 
   return (
@@ -29,6 +78,13 @@ export default function RegisterScreen({ navigation }) {
         <Card style={styles.card}>
           <Card.Content style={styles.cardContent}>
             <Title style={styles.title}>Create an Account</Title>
+
+            <TextInput
+              label="Name"
+              value={name}
+              onChangeText={setName}
+              style={styles.input}
+            />
             <TextInput
               label="Email"
               value={email}
@@ -44,6 +100,7 @@ export default function RegisterScreen({ navigation }) {
               onChangeText={setPassword}
               style={styles.input}
             />
+
             <Button
               mode="contained"
               onPress={handleRegister}

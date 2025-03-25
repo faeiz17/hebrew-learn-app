@@ -1,6 +1,6 @@
 // app/screens/Auth/LoginScreen.js
 import React, { useContext, useState } from "react";
-import { View, StyleSheet, Dimensions } from "react-native";
+import { View, StyleSheet, Dimensions, Alert } from "react-native";
 import {
   Button,
   TextInput,
@@ -11,15 +11,49 @@ import {
 } from "react-native-paper";
 import { AuthContext } from "../../contexts/AuthContext";
 import { SafeAreaView } from "react-native-safe-area-context";
+// IMPORTANT: import AsyncStorage
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function LoginScreen({ navigation }) {
   const { login } = useContext(AuthContext);
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleLogin = () => {
-    // Call your backend to log in; on success, update context.
-    login({ email });
+  const handleLogin = async () => {
+    try {
+      // 1) Make a POST request to your deployed backend
+      const response = await fetch(
+        "https://hebrew-backend-8sozbbz4w-faeiz17s-projects.vercel.app/api/users/login",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password }),
+        }
+      );
+
+      // 2) If the server responds with an error status, handle it
+      if (!response.ok) {
+        const errorData = await response.json();
+        Alert.alert("Login Error", errorData.message || "Something went wrong");
+        return;
+      }
+
+      // 3) Parse the JSON response
+      const data = await response.json();
+      // data should look like: { message: 'Login successful', user: { ...fields } }
+
+      // 4) Save the user data in AsyncStorage
+      await AsyncStorage.setItem("user", JSON.stringify(data.user));
+
+      // 5) Update context with the user
+      login(data.user);
+
+      // 6) Optionally navigate somewhere else (e.g., a Home screen)
+      navigation.navigate("Home");
+    } catch (error) {
+      Alert.alert("Login Error", error.message);
+    }
   };
 
   return (
@@ -90,7 +124,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
   },
   logo: {
-    backgroundColor: "#87CEEB", // sky blue accent
+    backgroundColor: "#87CEEB",
     marginBottom: 24,
   },
   card: {
