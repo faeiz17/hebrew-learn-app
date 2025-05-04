@@ -1,15 +1,18 @@
 // app/screens/Home/SplashScreen.js
 import React, { useEffect, useRef } from "react";
-import { View, StyleSheet, Animated } from "react-native";
+import { View, StyleSheet, Animated, Image } from "react-native";
 import { Text } from "react-native-paper";
 
+const hoopoeSplash = require("../../../assets/HoopoeSplash.png");
+// ^ Adjust path as needed
+
 export default function SplashScreen() {
-  // Create animated values for opacity and scale
+  // Create animated values for opacity (fade) and scale
   const fadeAnim = useRef(new Animated.Value(0)).current; // initial opacity: 0
   const scaleAnim = useRef(new Animated.Value(0.8)).current; // initial scale: 0.8
 
   useEffect(() => {
-    // Run parallel animations: fade in and scale in
+    // Run parallel animations: fade in & scale
     Animated.parallel([
       Animated.timing(fadeAnim, {
         toValue: 1,
@@ -29,12 +32,14 @@ export default function SplashScreen() {
       <Animated.View
         style={[
           styles.animatedContainer,
-          { opacity: fadeAnim, transform: [{ scale: scaleAnim }] },
+          {
+            opacity: fadeAnim,
+            transform: [{ scale: scaleAnim }],
+          },
         ]}
       >
-        <Text variant="headlineLarge" style={styles.text}>
-          HebrewLearnApp
-        </Text>
+        <Image source={hoopoeSplash} style={styles.birdImage} />
+        <Text style={styles.loadingText}>Loading...</Text>
       </Animated.View>
     </View>
   );
@@ -43,15 +48,22 @@ export default function SplashScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "#41B2EB", // Bright blue background
     justifyContent: "center",
     alignItems: "center",
   },
   animatedContainer: {
-    // Additional styling (optional)
+    alignItems: "center",
   },
-  text: {
-    color: "#3b82f6", // a modern blue tone
+  birdImage: {
+    width: 200,
+    height: 200,
+    resizeMode: "contain",
+  },
+  loadingText: {
+    marginTop: 16,
+    color: "#fff",
+    fontSize: 18,
     fontWeight: "bold",
   },
 });
