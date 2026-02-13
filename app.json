@@ -1,0 +1,39 @@
+{
+  "expo": {
+    "name": "HebrewLearnApp",
+    "slug": "HebrewLearnApp",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "scheme": "hebrewlearnapp",
+    "icon": "./assets/images/icon.png",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/images/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.faeiz-furqan.HebrewLearnApp"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/HoopoeFace.png",
+        "backgroundColor": "#ffffff"
+      },
+      "package": "com.faeiz_furqan.HebrewLearnApp"
+    },
+    "web": {
+      "favicon": "./assets/images/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "bf009a51-627e-4e25-a8ed-676a474bbebc"
+      }
+    },
+    "plugins": [
+      "expo-router"
+    ]
+  }
+}
