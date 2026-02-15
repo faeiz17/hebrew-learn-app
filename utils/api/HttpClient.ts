@@ -2,17 +2,25 @@ import axios from "axios";
 
 // Create an Axios instance
 const httpClient = axios.create({
-  baseURL: "https://hebrew-backend-8sozbbz4w-faeiz17s-projects.vercel.app/api", // Or your mock base URL
+  baseURL: "http://localhost:5000/api",
   headers: {
     "Content-Type": "application/json",
   },
 });
 
+import { getLocalItemAsync, LocalStorageKey } from "../helpers/Storage";
+
 // Request interceptor
 httpClient.interceptors.request.use(
-  (config) => {
-    // Basic request logging or token attachment can go here
-    console.log(`[API Request] ${config.method?.toUpperCase()} ${config.url}`);
+  async (config) => {
+    const token = await getLocalItemAsync(LocalStorageKey.SESSION);
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+
+    if (__DEV__) {
+      console.log(`[API Request] ${config.method?.toUpperCase()} ${config.url}`);
+    }
     return config;
   },
   (error) => Promise.reject(error),

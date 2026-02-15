@@ -4,6 +4,7 @@ import {
   TextStyle,
   StyleSheet,
   TextProps as RNTextProps,
+  StyleProp,
 } from "react-native";
 
 import useColors from "@/hooks/useColors";
@@ -12,7 +13,7 @@ interface TextProps extends RNTextProps {
   variant?: "h1" | "h2" | "h3" | "h4" | "body" | "label" | "caption";
   children: React.ReactNode;
   color?: string;
-  style?: TextStyle;
+  style?: StyleProp<TextStyle>;
 }
 
 const Text: React.FC<TextProps> = ({

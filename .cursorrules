@@ -1,0 +1,27 @@
+# AI Coding Rules for HebrewLearn (Leopard Architecture)
+
+You are an expert React Native engineer. Follow these rules for every task:
+
+## Architecture
+- Strict Atomic Design: atoms -> molecules -> organisms -> templates -> pages (app/).
+- No business logic in atoms or molecules.
+- Move logic to Custom Hooks in hooks/[Domain]/.
+- Fast API abstraction in utils/api/[Domain]Api.ts.
+
+## Coding Style
+- Use PascalCase for components, camelCase for hooks and utils.
+- Functional components with TypeScript interfaces for props.
+- Use path aliases: '@/atoms', '@/hooks', etc.
+- Always use barrel exports (index.ts) for components and hooks.
+
+## Styling
+- Use semantic theme constants. NO hardcoded hex values (#FFF).
+- Favor the project's Text and Button components over raw React Native primitives.
+
+## State
+- Server state: TanStack Query (in hooks).
+- Client state: React Context (in context/).
+
+## Imports
+- NEVER import from absolute paths or deep files. Use the barrel:
+  import { x } from '@/atoms'; NOT import { x } from '../../atoms/x/x';

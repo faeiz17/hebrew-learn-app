@@ -3,6 +3,8 @@ import * as Animatable from "react-native-animatable";
 import { Surface, RadioButton } from "react-native-paper";
 
 import { Text } from "@/atoms";
+import { useTheme } from "@/utils/theme-engine";
+import useColors from "@/hooks/useColors";
 
 interface OptionItemProps {
   id: string;
@@ -25,23 +27,26 @@ const OptionItem: React.FC<OptionItemProps> = ({
   onSelect,
   style,
 }) => {
+  const { theme } = useTheme();
+  const colors = useColors();
+
   let borderColor = "#e0e0e0";
   let backgroundColor = "#FFFFFF";
-  let radioColor = "#41B2EB";
+  let radioColor = colors.blue6 as string;
 
   if (isSelected) {
-    borderColor = "#41B2EB";
-    backgroundColor = "rgba(65, 178, 235, 0.1)";
+    borderColor = colors.blue6 as string;
+    backgroundColor = "rgba(65, 178, 235, 0.05)";
   }
 
   if (showFeedback && isSelected) {
     if (isCorrect) {
       borderColor = "#4CAF50";
-      backgroundColor = "rgba(76, 175, 80, 0.1)";
+      backgroundColor = "rgba(76, 175, 80, 0.08)";
       radioColor = "#4CAF50";
     } else {
       borderColor = "#F44336";
-      backgroundColor = "rgba(244, 67, 54, 0.1)";
+      backgroundColor = "rgba(244, 67, 54, 0.08)";
       radioColor = "#F44336";
     }
   }
@@ -53,7 +58,10 @@ const OptionItem: React.FC<OptionItemProps> = ({
         onPress={() => onSelect(id)}
         disabled={showFeedback}
       >
-        <Surface style={[styles.container, { borderColor, backgroundColor }]}>
+        <Surface style={[
+          styles.container,
+          { borderColor, backgroundColor, borderRadius: theme.radius[200] }
+        ]}>
           <View style={styles.radioContainer}>
             <RadioButton.Android
               value={id}

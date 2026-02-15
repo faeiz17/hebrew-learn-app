@@ -1,22 +1,26 @@
+import { DrawerNavigationProp } from "@react-navigation/drawer";
+import { useNavigation } from "@react-navigation/native";
 import { useRouter } from "expo-router";
 import React from "react";
 
 import { useSession } from "@/hooks/Auth/useSession";
 import { WelcomeTemplate } from "@/templates";
-import { AppRoutes } from "@/utils/constants/routes";
 
 export default function WelcomeScreen() {
-  const { session, signIn } = useSession();
+  const { session } = useSession();
   const router = useRouter();
+  const navigation = useNavigation<DrawerNavigationProp<any>>();
 
   return (
     <WelcomeTemplate
       user={session}
-      onContinueLearning={() => router.push(AppRoutes.DRAWER.LESSONS as never)}
+      onContinueLearning={() => router.push("/(drawer)/lessons")}
       onTryDemo={() =>
-        router.push(AppRoutes.EXERCISES.DETAILS("story_123") as never)
+        router.push("/exercises/story_123")
       }
-      onSignInDemo={() => signIn("demo@example.com")}
+      onLogin={() => router.push("/(auth)/login")}
+      onRegister={() => router.push("/(auth)/register")}
+      onMenu={() => navigation.openDrawer()}
     />
   );
 }

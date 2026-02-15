@@ -1,21 +1,16 @@
+import { useNavigation } from "expo-router";
+import { DrawerNavigationProp } from "@react-navigation/drawer";
 import React from "react";
-import { View, StyleSheet } from "react-native";
 
-import Text from "@/atoms/Text";
+import { ComingSoonTemplate } from "@/templates";
 
 export default function SettingsScreen() {
+  const navigation = useNavigation<DrawerNavigationProp<any>>();
+
   return (
-    <View style={styles.container}>
-      <Text variant="h1">Settings</Text>
-      <Text variant="body">Adjust your preferences.</Text>
-    </View>
+    <ComingSoonTemplate
+      title="Settings"
+      onMenu={() => navigation.openDrawer()}
+    />
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-});

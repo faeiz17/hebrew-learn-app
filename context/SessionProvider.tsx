@@ -6,7 +6,8 @@ import { useSessionState } from "@/hooks/useSessionState";
 import { User } from "@/types";
 
 interface SessionContextType {
-  signIn: (email: string) => Promise<void>;
+  signIn: (email: string, password?: string) => Promise<void>;
+  signUp: (name: string, email: string, password?: string) => Promise<void>;
   signOut: () => void;
   session: User | null;
   isLoading: boolean;
@@ -29,14 +30,24 @@ export const SessionProvider = ({
 }) => {
   const [[isLoading, session], setSession] = useSessionState();
 
-  const signIn = async (email: string) => {
+  const signIn = async (email: string, password = "Password123!") => {
     try {
-      const response = await AuthApi.login(email);
-      await setSession(response.user);
+      const response = await AuthApi.login(email, password);
+      await setSession(response.user, response.token);
       router.replace("/(drawer)");
     } catch (error) {
       console.error("Sign in failed:", error);
-      // Ensure specific error handling or rethrow if needed
+      throw error;
+    }
+  };
+
+  const signUp = async (name: string, email: string, password = "Password123!") => {
+    try {
+      const response = await AuthApi.register(name, email, password);
+      await setSession(response.user, response.token);
+      router.replace("/(drawer)");
+    } catch (error) {
+      console.error("Sign up failed:", error);
       throw error;
     }
   };
@@ -51,6 +62,7 @@ export const SessionProvider = ({
     <AuthContext.Provider
       value={{
         signIn,
+        signUp,
         signOut,
         session,
         isLoading,

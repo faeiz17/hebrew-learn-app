@@ -5,11 +5,11 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "scheme": "hebrewlearnapp",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/images/HoopoeFace.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "splash": {
-      "image": "./assets/images/splash-icon.png",
+      "image": "./assets/images/HoopoeSplash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },

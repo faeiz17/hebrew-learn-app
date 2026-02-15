@@ -1,21 +1,32 @@
+import { useNavigation } from "@react-navigation/native";
+import { DrawerNavigationProp } from "@react-navigation/drawer";
+import { useRouter } from "expo-router";
 import React from "react";
-import { View, StyleSheet } from "react-native";
 
-import Text from "@/atoms/Text";
+import { useStories } from "@/hooks/Stories";
+import { LessonsTemplate } from "@/templates";
+import { AppRoutes } from "@/utils/constants/routes";
 
 export default function LessonsScreen() {
+  const { data: stories, isLoading } = useStories();
+  const router = useRouter();
+  const navigation = useNavigation<DrawerNavigationProp<any>>();
+
+  const handleStoryPress = (id: string) => {
+    router.push(AppRoutes.EXERCISES.DETAILS(id) as never);
+  };
+
+  const handleMenuPress = () => {
+    navigation.openDrawer();
+  };
+
   return (
-    <View style={styles.container}>
-      <Text variant="h1">Lessons</Text>
-      <Text variant="body">Start learning here!</Text>
-    </View>
+    <LessonsTemplate
+      stories={stories}
+      isLoading={isLoading}
+      onStoryPress={handleStoryPress}
+      onMenu={handleMenuPress}
+    />
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-});

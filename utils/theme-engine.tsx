@@ -26,6 +26,10 @@ export interface ComponentTheme {
 
 export interface Theme {
   colors: Colors;
+  spacing: Record<number, number>;
+  radius: Record<number, number>;
+  fontSize: Record<number, number>;
+  styles: Record<string, any>;
   components?: ComponentTheme;
 }
 

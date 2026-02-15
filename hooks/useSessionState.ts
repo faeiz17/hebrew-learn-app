@@ -23,12 +23,16 @@ export const useSessionState = () => {
     loadSession();
   }, []);
 
-  const setSession = async (user: User | null) => {
+  const setSession = async (user: User | null, token?: string) => {
     setSessionState(user);
     if (user) {
       await setLocalItemAsync(LocalStorageKey.USER, JSON.stringify(user));
+      if (token) {
+        await setLocalItemAsync(LocalStorageKey.SESSION, token);
+      }
     } else {
       await removeLocalItemAsync(LocalStorageKey.USER);
+      await removeLocalItemAsync(LocalStorageKey.SESSION);
     }
   };
 

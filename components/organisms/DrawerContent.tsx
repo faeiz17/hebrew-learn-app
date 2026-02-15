@@ -36,55 +36,35 @@ export default function DrawerContent(props: DrawerContentProps) {
   return (
     <LinearGradient
       colors={["#41B2EB", "#0072FF"]}
-      start={{ x: 0, y: 0 }}
-      end={{ x: 0, y: 1 }}
       style={styles.container}
     >
-      <SafeAreaView style={styles.safeArea}>
-        <DrawerContentScrollView
-          {...props}
-          contentContainerStyle={styles.drawerContent}
-          showsVerticalScrollIndicator={false}
-        >
-          {/* User Profile Section */}
+      <DrawerContentScrollView
+        {...props}
+        contentContainerStyle={styles.drawerContent}
+        showsVerticalScrollIndicator={false}
+      >
+        <SafeAreaView edges={["left", "right", "bottom"]} style={styles.flexOne}>
+          {/* Top Section: User & Stats */}
           {user && (
             <View style={styles.profileSection}>
               <UserInfo user={user} />
-
               <View style={styles.statsRow}>
                 <View style={styles.statItem}>
-                  <Icon
-                    icon="trophy"
-                    size={20}
-                    iconColor="#FFFFFF"
-                    style={styles.statIcon}
-                  />
-                  <Text variant="h3" style={styles.statValue}>
-                    {user.starsEarned}
-                  </Text>
-                  <Text variant="caption" style={styles.statLabel}>
-                    Stars
-                  </Text>
+                  <Icon icon="trophy" size={20} iconColor="#FFD700" />
+                  <Text variant="h3" style={styles.statValue}>{user.xp || 0}</Text>
+                  <Text variant="caption" style={styles.statLabel}>XP</Text>
                 </View>
-
                 <View style={styles.statDivider} />
-
                 <View style={styles.statItem}>
-                  <Icon
-                    icon="fire"
-                    size={20}
-                    iconColor="#FFFFFF"
-                    style={styles.statIcon}
-                  />
-                  <View style={styles.userInfo}>
-                    <Text variant="h4">{user?.name || "Guest"}</Text>
-                    <Text
-                      variant="caption"
-                      style={{ color: colors.contentSecondary }}
-                    >
-                      {user?.email || "Sign in to save progress"}
-                    </Text>
-                  </View>
+                  <Icon icon="fire" size={20} iconColor="#FF4500" />
+                  <Text variant="h3" style={styles.statValue}>{user.dailyStreak || 0}</Text>
+                  <Text variant="caption" style={styles.statLabel}>Streak</Text>
+                </View>
+                <View style={styles.statDivider} />
+                <View style={styles.statItem}>
+                  <Icon icon="star" size={20} iconColor="#FFEB3B" />
+                  <Text variant="h3" style={styles.statValue}>{user.highestUnlockedLevel || 1}</Text>
+                  <Text variant="caption" style={styles.statLabel}>Level</Text>
                 </View>
               </View>
             </View>
@@ -92,80 +72,73 @@ export default function DrawerContent(props: DrawerContentProps) {
 
           <Divider style={styles.divider} />
 
-          {/* Navigation Items */}
+          {/* Middle Section: Navigation Items */}
           <View style={styles.menuSection}>
-            {/* Custom drawer items with animations */}
-            <Animatable.View animation="fadeInLeft" delay={500} duration={500}>
+            <Animatable.View animation="fadeInLeft" delay={100} duration={400}>
               <DrawerItem
-                label={() => (
-                  <View style={styles.menuItem}>
-                    <Icon
-                      icon="home"
-                      size={24}
-                      iconColor="#FFFFFF"
-                      style={styles.menuIcon}
-                    />
-                    <Text variant="body" style={styles.menuText}>
-                      Home
-                    </Text>
-                  </View>
-                )}
-                onPress={() =>
-                  navigation.navigate(AppRoutes.DRAWER.HOME as never)
-                }
-                style={[
-                  styles.drawerItem,
-                  state.index === 0 && styles.activeItem,
-                ]}
+                label="Home"
+                icon={({ color, size }) => <Icon icon="home" size={size} iconColor="#FFF" />}
+                labelStyle={styles.menuText}
+                onPress={() => navigation.navigate(AppRoutes.DRAWER.HOME as never)}
+                style={[styles.drawerItem, state.index === 0 && styles.activeItem]}
               />
             </Animatable.View>
 
-            <Animatable.View animation="fadeInLeft" delay={600} duration={500}>
+            <Animatable.View animation="fadeInLeft" delay={200} duration={400}>
               <DrawerItem
-                label={() => (
-                  <View style={styles.menuItem}>
-                    <Icon
-                      icon="book-open-variant"
-                      size={24}
-                      iconColor="#FFFFFF"
-                      style={styles.menuIcon}
-                    />
-                    <Text variant="body" style={styles.menuText}>
-                      Lessons
-                    </Text>
-                  </View>
-                )}
-                onPress={() =>
-                  navigation.navigate(AppRoutes.DRAWER.LESSONS as never)
-                }
-                style={[
-                  styles.drawerItem,
-                  state.index === 1 && styles.activeItem,
-                ]}
+                label="Lessons"
+                icon={({ color, size }) => <Icon icon="book-open-variant" size={size} iconColor="#FFF" />}
+                labelStyle={styles.menuText}
+                onPress={() => navigation.navigate(AppRoutes.DRAWER.LESSONS as never)}
+                style={[styles.drawerItem, state.index === 1 && styles.activeItem]}
               />
             </Animatable.View>
 
-            {/* Add more items similarly */}
+            <Animatable.View animation="fadeInLeft" delay={300} duration={400}>
+              <DrawerItem
+                label="Leaderboard"
+                icon={({ color, size }) => <Icon icon="trophy-outline" size={size} iconColor="#FFF" />}
+                labelStyle={styles.menuText}
+                onPress={() => navigation.navigate(AppRoutes.DRAWER.LEADERBOARD as never)}
+                style={[styles.drawerItem, state.index === 2 && styles.activeItem]}
+              />
+            </Animatable.View>
+
+            <Animatable.View animation="fadeInLeft" delay={400} duration={400}>
+              <DrawerItem
+                label="Settings"
+                icon={({ color, size }) => <Icon icon="cog-outline" size={size} iconColor="#FFF" />}
+                labelStyle={styles.menuText}
+                onPress={() => navigation.navigate(AppRoutes.DRAWER.SETTINGS as never)}
+                style={[styles.drawerItem, state.index === 3 && styles.activeItem]}
+              />
+            </Animatable.View>
           </View>
 
-          <Divider style={styles.divider} />
+          {/* Push the bottom section to the bottom */}
+          <View style={{ flex: 1 }} />
 
-          {/* App logo and version */}
-          <View style={styles.footerSection}>
-            <Image
-              source={hoopoeIcon}
-              style={styles.logoImage}
-              resizeMode="contain"
+          {/* Bottom Section: Logout & Footer */}
+          <View style={styles.bottomSection}>
+            <Divider style={styles.divider} />
+            <DrawerItem
+              label="Logout"
+              icon={({ color, size }) => <Icon icon="logout" size={size} iconColor="rgba(255,255,255,0.7)" />}
+              labelStyle={styles.logoutText}
+              onPress={() => signOut()}
+              style={styles.drawerItem}
             />
-            <Text variant="h3" style={styles.appName}>
-              Hebrew Adventure
-            </Text>
-            <Text variant="caption" style={styles.versionText}>
-              Version {Constants.expoConfig?.version || "1.0.0"}
-            </Text>
+
+            <View style={styles.footerSection}>
+              <Image source={hoopoeIcon} style={styles.logoImage} resizeMode="contain" />
+              <Text variant="h3" style={styles.appName}>Hebrew Adventure</Text>
+              <Text variant="caption" style={styles.versionText}>
+                Version {Constants.expoConfig?.version || "1.0.0"}
+              </Text>
+            </View>
           </View>
-        </DrawerContentScrollView>
-      </SafeAreaView>
+        </SafeAreaView>
+      </DrawerContentScrollView>
     </LinearGradient>
   );
 }
@@ -174,25 +147,24 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  safeArea: {
+  flexOne: {
     flex: 1,
   },
   drawerContent: {
-    flex: 1,
-    paddingTop: 0,
+    flexGrow: 1,
+    paddingTop: 50,
   },
   profileSection: {
     paddingHorizontal: 16,
-    paddingTop: 16,
-    paddingBottom: 24,
+    paddingTop: 4,
     alignItems: "center",
   },
   statsRow: {
     flexDirection: "row",
     justifyContent: "space-around",
     width: "100%",
-    paddingHorizontal: 20,
-    marginTop: 8,
+    paddingHorizontal: 10,
+    marginTop: 10,
   },
   statItem: {
     alignItems: "center",
@@ -200,73 +172,71 @@ const styles = StyleSheet.create({
   },
   statDivider: {
     width: 1,
-    height: "100%",
-    backgroundColor: "rgba(255,255,255,0.3)",
-    marginHorizontal: 10,
-  },
-  statIcon: {
-    margin: 0,
-    padding: 0,
-    marginBottom: -5,
+    height: "10%",
+    alignSelf: "center",
+    backgroundColor: "rgba(255,255,255,0.2)",
   },
   statValue: {
     fontWeight: "bold",
     color: "#FFFFFF",
+    marginTop: 2,
+    fontSize: 18,
   },
   statLabel: {
-    color: "rgba(255,255,255,0.8)",
-  },
-  userInfo: {
-    alignItems: "flex-start",
-    marginLeft: 12,
+    color: "rgba(255,255,255,0.7)",
+    fontSize: 12,
   },
   divider: {
     backgroundColor: "rgba(255,255,255,0.2)",
     height: 1,
-    marginVertical: 8,
+    marginVertical: 4,
   },
   menuSection: {
-    flex: 1,
     paddingTop: 8,
   },
   drawerItem: {
-    marginHorizontal: 0,
-    marginVertical: 4,
+    marginHorizontal: 12,
+    marginVertical: 1,
+    borderRadius: 12,
+    paddingVertical: 2,
   },
   activeItem: {
-    backgroundColor: "rgba(255,255,255,0.2)",
-    borderRadius: 8,
-  },
-  menuItem: {
-    flexDirection: "row",
-    alignItems: "center",
-    height: 40,
-  },
-  menuIcon: {
-    margin: 0,
-    padding: 0,
-    marginRight: -4,
+    backgroundColor: "rgba(255,255,255,0.15)",
   },
   menuText: {
     color: "#FFFFFF",
-    flex: 1,
+    fontSize: 16,
+    fontWeight: "600",
+    marginLeft: -16,
   },
-  footerSection: {
-    padding: 16,
-    alignItems: "center",
+  logoutText: {
+    color: "rgba(255,255,255,0.8)",
+    fontSize: 16,
+    fontWeight: "600",
+    marginLeft: -16,
+  },
+  bottomSection: {
+    paddingBottom: 20,
     marginTop: "auto",
   },
+  footerSection: {
+    paddingTop: 12,
+    paddingBottom: 16,
+    alignItems: "center",
+  },
   logoImage: {
-    width: 60,
-    height: 60,
-    marginBottom: 8,
+    width: 44,
+    height: 44,
+    marginBottom: 12,
   },
   appName: {
     fontWeight: "bold",
     color: "#FFFFFF",
-    marginBottom: 4,
+    fontSize: 18,
+    marginBottom: 2,
   },
   versionText: {
-    color: "rgba(255,255,255,0.6)",
+    color: "rgba(255,255,255,0.5)",
+    fontSize: 12,
   },
 });

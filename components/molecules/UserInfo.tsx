@@ -22,11 +22,11 @@ const UserInfo: React.FC<UserInfoProps> = ({ user }) => {
         style={styles.avatarContainer}
       >
         <Avatar.Image
-          source={{ uri: user.avatar || "https://via.placeholder.com/80" }}
+          source={{ uri: user.avatarUrl || "https://via.placeholder.com/80" }}
           size={80}
           style={styles.avatar}
         />
-        <Badge style={styles.levelBadge}>{user.level}</Badge>
+        <Badge style={styles.levelBadge}>{user.highestUnlockedLevel}</Badge>
       </Animatable.View>
 
       <Animatable.View

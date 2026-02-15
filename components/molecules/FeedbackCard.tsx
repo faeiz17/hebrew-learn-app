@@ -1,4 +1,6 @@
-import { View, StyleSheet, Image, ImageSourcePropType } from "react-native";
+import { useTheme } from "@/utils/theme-engine";
+import React from "react";
+import { View, StyleSheet, Image } from "react-native";
 import * as Animatable from "react-native-animatable";
 import { Surface } from "react-native-paper";
 
@@ -10,27 +12,27 @@ interface FeedbackCardProps {
   isVisible: boolean;
 }
 
-// Assets (Using require for now as in original, but could be passed as props)
-// Adjust paths as needed for the new structure or pass them
 const FeedbackCard: React.FC<FeedbackCardProps> = ({
   isCorrect,
   isVisible,
 }) => {
+  const { theme } = useTheme();
   if (!isVisible) return null;
 
-  const style = isCorrect ? styles.correct : styles.incorrect;
   const imageSource = isCorrect ? Images.Trophy : Images.HoopoeFaceLocked;
   const title = isCorrect ? "Correct!" : "Incorrect!";
-  const message = isCorrect
-    ? "Great job! You chose the right answer."
-    : "Not quite. Try to remember the correct meaning.";
-
-  // Determine feedback color based on correctness
   const feedbackColor = isCorrect ? "#4CAF50" : "#F44336";
 
   return (
-    <Animatable.View animation="fadeIn" duration={500} style={styles.container}>
-      <Surface style={StyleSheet.flatten([styles.card, style])}>
+    <Animatable.View animation="fadeInUp" duration={500} style={styles.container}>
+      <Surface style={[
+        styles.card,
+        {
+          backgroundColor: isCorrect ? "rgba(76, 175, 80, 0.08)" : "rgba(244, 67, 54, 0.08)",
+          borderColor: feedbackColor,
+          borderRadius: theme.radius[300]
+        }
+      ]}>
         <View style={styles.header}>
           <Image
             source={imageSource}
@@ -39,13 +41,15 @@ const FeedbackCard: React.FC<FeedbackCardProps> = ({
           />
           <Text
             variant="h3"
-            style={StyleSheet.flatten([styles.title, { color: feedbackColor }])}
+            style={[theme.styles.headingM, { color: feedbackColor }]}
           >
-            {isCorrect ? "Correct!" : "Incorrect"}
+            {title}
           </Text>
         </View>
         <Text variant="body" style={styles.message}>
-          {isCorrect ? "Great job!" : "Try again next time."}
+          {isCorrect
+            ? "Excellent! You're mastering this story."
+            : "Not quite yet. Keep practicing to improve!"}
         </Text>
       </Surface>
     </Animatable.View>
@@ -55,21 +59,12 @@ const FeedbackCard: React.FC<FeedbackCardProps> = ({
 const styles = StyleSheet.create({
   container: {
     padding: 16,
-    paddingTop: 0,
+    paddingTop: 8,
   },
   card: {
-    padding: 16,
-    borderRadius: 12,
-    borderWidth: 1,
-    elevation: 2,
-  },
-  correct: {
-    backgroundColor: "rgba(76, 175, 80, 0.1)",
-    borderColor: "#4CAF50",
-  },
-  incorrect: {
-    backgroundColor: "rgba(244, 67, 54, 0.1)",
-    borderColor: "#F44336",
+    padding: 20,
+    borderWidth: 1.5,
+    elevation: 0,
   },
   header: {
     flexDirection: "row",
@@ -77,16 +72,14 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   image: {
-    width: 36,
-    height: 36,
+    width: 40,
+    height: 40,
     marginRight: 12,
-  },
-  title: {
-    fontWeight: "bold",
-    color: "#333",
   },
   message: {
     color: "#555",
+    fontSize: 16,
+    lineHeight: 22,
   },
 });
 

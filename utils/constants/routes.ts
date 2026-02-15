@@ -1,13 +1,17 @@
 export const AppRoutes = {
   DRAWER: {
-    ROOT: "/(drawer)",
-    HOME: "/(drawer)/index",
-    LESSONS: "/(drawer)/lessons",
-    LEADERBOARD: "/(drawer)/leaderboard",
-    SETTINGS: "/(drawer)/settings",
+    ROOT: "(drawer)",
+    HOME: "index",
+    LESSONS: "lessons",
+    LEADERBOARD: "leaderboard",
+    SETTINGS: "settings",
   },
   EXERCISES: {
     ROOT: "/exercises",
     DETAILS: (id: string) => `/exercises/${id}`,
+  },
+  AUTH: {
+    LOGIN: "/(auth)/login",
+    REGISTER: "/(auth)/register",
   },
 } as const;
